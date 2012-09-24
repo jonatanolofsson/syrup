@@ -9,17 +9,18 @@ namespace syrup {
         template<typename T>
         class PIDController {
             public:
-                T vmin, vmax;
-                T eimin, eimax;
-                T ep, ei, e, r, u;
-                T K, Ti, Td;
+                int vmin, vmax;
+                int eimin, eimax;
+                int ep, ei, e, r, u;
+                int K, Ti, Td;
+                int P, I, D;
                 int lastInvokation;
                 PIDController()
                 :
-                    vmin(-1000), vmax(1000),
-                    eimin(-1000), eimax(1000),
+                    vmin(-1023), vmax(1024),
+                    eimin(-1023), eimax(1024),
                     ep(0), ei(0), e(0), r(0), u(0),
-                    K(1), Ti(1), Td(1000),
+                    K(10), Ti(500000), Td(5000),
                     lastInvokation(0)
                 {}
 
@@ -28,28 +29,34 @@ namespace syrup {
                     e = r - y;
 
                     if(lastInvokation == 0) {
-                        lastInvokation = millis();
+                        lastInvokation = micros();
                         ep = e;
                         return 0;
                     }
-                    Ts = millis() - lastInvokation;
+                    Ts = micros() - lastInvokation;
 
-                    ei  = clamp(eimin, ei + K*Ts*e/Ti, eimax);
-                    //~ u   = clamp(vmin, K*e + ei + K*Td/Ts*(e - ep), vmax);
+                    P = K*e;
+                    //~ I = clamp(eimin, I + K*Ts*e/Ti, eimax);
+                    D = (K*Td*(e - ep))/Ts;
 
-                    u = K*e + ei; // P + I
+                    u = P + D;
+                    u = clamp(vmin, u, vmax);
+
+                    //~ u = ei; // I
 
                     ep = e;
-                    lastInvokation = millis();
+                    lastInvokation = micros();
                     //~ Serial1.print("Control: ");
                     //~ Serial1.print(" [ ");
                     //~ Serial1.print(Ts);
                     //~ Serial1.print(" ] ");
                     //~ Serial1.print(e);
                     //~ Serial1.print(" => ");
-                    //~ Serial1.print(K*e);
+                    //~ Serial1.print(P);
                     //~ Serial1.print(" + ");
-                    //~ Serial1.print(ei);
+                    //~ Serial1.print(I);
+                    //~ Serial1.print(" + ");
+                    //~ Serial1.print(D);
                     //~ Serial1.print(" = ");
                     //~ Serial1.println(u);
                     return u;
@@ -61,6 +68,29 @@ namespace syrup {
                     K   = K_;
                     Ti  = Ti_;
                     Td  = Td_;
+                }
+                void imc(T Tc, T To, T Kp, T L = 0) {
+                    T tau = L / (L + To);
+                    K = ((L + To) / (Kp * (Tc + L))) -  L/2  / (Kp * (Tc + L));
+                    Ti = (L + To) - L/2;
+                    Td = L * (1-tau) / (2-tau);
+                    Serial1.print("Setting IMC parameters: ");
+                    Serial1.print(K);
+                    Serial1.print(", ");
+                    Serial1.print(Ti);
+                    Serial1.print(", ");
+                    Serial1.println(Td);
+                }
+                void lambda(T Tc, T To, T Kp,  T L = 0) {
+                    K = To / (Kp * Tc + L);
+                    Ti = To;
+                    Td = 0;
+                    Serial1.print("Setting lambda parameters: ");
+                    Serial1.print(K);
+                    Serial1.print(", ");
+                    Serial1.print(Ti);
+                    Serial1.print(", ");
+                    Serial1.println(Td);
                 }
         };
     }

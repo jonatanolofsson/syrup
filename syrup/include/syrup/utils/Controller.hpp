@@ -29,6 +29,7 @@ namespace syrup {
                     uint16_t low;
                     uint16_t high;
                     uint16_t zero;
+                    int16_t scale;
                 } settings;
 
                 Controller(ST* sensor_, AT* actuator_, stateMachineFunction initialState_)
@@ -40,7 +41,7 @@ namespace syrup {
                     running(true),
                     controller()
                 {
-                    settings = (settings_s){0,0,0};
+                    settings = (settings_s){0,0,0,1};
                     xTaskCreate(utils::classThreadInitializer<MyType>,
                                 (signed portCHAR *)"ControllerStateMachineTask",
                                 STACK_SIZE,
@@ -60,7 +61,7 @@ namespace syrup {
                 }
 
                 void stopController() {
-                    active = true;
+                    active = false;
                 }
 
                 void tick() {
@@ -82,7 +83,9 @@ namespace syrup {
                     while(running) {
                         if(active) {
                             sensor->measure(&y);
-                            actuator->setControlOutput(controller(y-settings.zero));
+                            actuator->setControlOutput(controller(settings.scale * (y - settings.zero)));
+                            delayMicroseconds(50);
+                            //~ Serial1.println(y);
                         } else {
                             taskYIELD();
                         }

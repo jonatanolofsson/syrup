@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 #define clamp(mn, val, mx) ((val)<(mn)?(mn):((val)>(mx)?(mx):(val)))
+#define sign(val)   ((val)<0?-1:1)
 using std::min;
 using std::max;
 using std::abs;

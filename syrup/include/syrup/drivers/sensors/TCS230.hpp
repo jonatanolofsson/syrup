@@ -6,6 +6,8 @@
 #include <libmaple/timer.h>
 #include <wirish/wirish.h>
 
+//~ #define record_len 100
+
 namespace syrup {
     namespace drivers {
         namespace sensors {
@@ -14,6 +16,7 @@ namespace syrup {
                     uint8_t exti_pin;
                     timer_dev* timer;
                 public:
+                    //~ uint16_t stepdata[record_len];
                     TCS230(const uint8_t exti_pin_, HardwareTimer&);
                     void sample();
             };
