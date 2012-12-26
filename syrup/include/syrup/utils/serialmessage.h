@@ -6,14 +6,14 @@
 struct MessageHeader {
     uint16_t    id;
     uint16_t    length;
-    uint8_t     headerCRC;
-    uint8_t     bodyCRC;
+    uint16_t    headerCRC;
+    uint16_t    bodyCRC;
 };
 struct Message {
     char*       body;
     MessageHeader header;
-    uint8_t     headerCRC;
-    uint8_t     bodyCRC;
+    uint16_t     headerCRC;
+    uint16_t     bodyCRC;
 };
 
 #endif

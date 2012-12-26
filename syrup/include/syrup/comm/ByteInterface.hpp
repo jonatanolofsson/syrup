@@ -1,25 +1,29 @@
 #ifndef SYRUP_COMM_ByteInterface_HPP
 #define SYRUP_COMM_ByteInterface_HPP
 
-#include <stdint.h>
+#include <syrup/types.hpp>
 
-namespace communication {
+namespace syrup {
     class ByteInterface {
         public:
-            typedef uint8_t address_t;
-            ByteInterface(const address_t adr) : address(adr) {}
-            address_t address;
+            virtual void open() {};
+            virtual void close() {};
             virtual void beginTransmission() {};
             virtual void endTransmission() {};
-            virtual void send(uint8_t) = 0;
-            virtual void send(uint8_t*, int) = 0;
-            virtual void send(int) = 0;
-            virtual void send(int*, int) = 0;
-            virtual void send(char*) = 0;
-            virtual void command(uint8_t) = 0;
-            virtual void command(uint8_t, uint8_t) = 0;
-            virtual uint8_t get(int, uint8_t*) = 0;
+            virtual void send(const U8) = 0;
+            virtual void send(const U8* const, int) = 0;
+            virtual void send(const int) = 0;
+            //~ virtual void send(int*, int) = 0;
+            //~ virtual void send(const U8* const) = 0;
+            virtual void command(const U8) = 0;
+            virtual void command(const U8, const U8) = 0;
+            virtual U8 get(U8*, const int) = 0;
     };
+
+    int open(ByteInterface* const iface);
+    inline void close(const int descriptor) {};
+    int write(const int descriptor, const U8* const data, const int length);
+    int read(const int descriptor, U8* const buf, const int length);
 }
 
 #endif

@@ -4,23 +4,29 @@
 #include <stdint.h>
 #include <syrup/comm/ByteInterface.hpp>
 #include <Wire/WireBase.h>
+#include <syrup/types.hpp>
 
-namespace communication {
+namespace syrup {
     class I2CPeripheral : public ByteInterface {
         public:
+            typedef U8 address_t;
+
             WireBase* dev;
-            I2CPeripheral(WireBase* dev_, address_t adr) : ByteInterface(adr), dev(dev_) {}
+            I2CPeripheral(WireBase* dev_, address_t adr)
+            : dev(dev_)
+            , address(adr)
+            {}
+            address_t address;
             void beginTransmission() { dev->beginTransmission(address); }
             void endTransmission() { dev->endTransmission(); }
-            void send(uint8_t a) { dev->send(a); };
-            void send(uint8_t* a, int b) { dev->send(a,b); };
-            void send(int a) { dev->send(a); };
-            void send(int* a, int b) { dev->send(a,b); };
-            void send(char* a) { dev->send(a); };
-            void command(uint8_t a) { beginTransmission(); send(a); endTransmission(); };
-            void command(uint8_t a, uint8_t b) { beginTransmission(); send(a); send(b); endTransmission(); };
-            uint8_t get(int N, uint8_t* buffer) { return dev->requestFrom(address, N, buffer); }
+            void send(const U8 a) { dev->send(a); };
+            void send(const U8* const a, const int b) { dev->send((U8*)a,b); };
+            void send(const int a) { dev->send(a); };
+            void send(const int* const a, const int b) { dev->send((int*)a,b); };
+            //~ void send(const U8* const a) { dev->send((U8*)a); };
+            void command(const U8 a) { beginTransmission(); send(a); endTransmission(); };
+            void command(const U8 a, const U8 b) { beginTransmission(); send(a); send(b); endTransmission(); };
+            U8 get(U8* const buffer, int N) { return dev->requestFrom(address, N, buffer); }
     };
 }
-
 #endif
