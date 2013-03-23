@@ -3,12 +3,16 @@
 
 #include <syrup/drivers/sensors/Sensor.hpp>
 #include <stdint.h>
-#include <syrup/comm/ByteInterface.hpp>
+#include <libmaple/i2c.h>
 
 namespace syrup {
     class HMC5883L : public SuperSensor<3> {
         private:
+            i2c_dev* device;
             uint8_t exti_pin;
+
+            uint8_t buffer[6];
+            i2c_msg sampleMsgs[3];
         public:
             enum address {
                 I2C_ADDRESS     = 0x1E
@@ -54,10 +58,9 @@ namespace syrup {
                 Y = 1,
                 Z = 2
             };
-            ByteInterface* port;
-            HMC5883L(ByteInterface* port_, const uint8_t exti_pin_ = 0);
+            HMC5883L(i2c_dev* dev_, const uint8_t exti_pin_ = 0);
             void setup();
-            void single_sample();
+            void saveData(struct i2c_msg*);
             void sample();
             void calibrate();
     };

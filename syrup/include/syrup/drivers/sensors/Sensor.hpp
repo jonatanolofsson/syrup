@@ -6,9 +6,16 @@
 #include <syrup/utils/utils.hpp>
 #include <wirish/wirish.h>
 #include <string.h>
+#include <syrup/isr.hpp>
 #include <syrup/types.hpp>
 
 namespace syrup {
+    template<int N>
+    class Sensor;
+
+    template<int N>
+    void sensorISR(void* o) {((Sensor<N>*)o)->lowerISR();}
+
     template<int N>
     class Sensor
     {
@@ -29,7 +36,12 @@ namespace syrup {
             } recording;
 
             virtual void sample() = 0;
-            virtual void run() {sample();}
+            virtual void isr() {
+                isr::queue(sensorISR<N>, this);
+            }
+            void lowerISR() {
+                sample();
+            }
             Sensor() : bufferswitch(false) {
                 Sensor::clear();
             }

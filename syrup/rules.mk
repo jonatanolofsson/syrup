@@ -18,6 +18,7 @@ CXXFLAGS_$(d) :=  -Os -fdata-sections -ffunction-sections -Wl,-gc-sections
 LDFLAGS_$(d) :=  -Wl,-gc-sections -dead-strip
 
 # Local rules and targets
+cppSRCS_$(d) += isr.cpp
 cppSRCS_$(d) += comm/ByteInterface.cpp
 
 #~ cppSRCS_$(d) += drivers/display/SSD1308.cpp

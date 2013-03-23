@@ -3,10 +3,14 @@
 
 #include <syrup/drivers/sensors/Sensor.hpp>
 #include <stdint.h>
-#include <syrup/comm/i2c.hpp>
+#include <libmaple/i2c.h>
 
 namespace syrup {
     class MS5611 : public SuperSensor<1> {
+        private:
+            i2c_dev* device;
+
+            uint8_t buffer[3];
         public:
             enum {
                 I2C_ADDRESS_HIGH= 0x76,
@@ -29,12 +33,11 @@ namespace syrup {
                 PROM_BASE_ADDR  = 0xA2,
                 PROM_REG_COUNT  = 6
             };
-            uint16_t coeff[];
-            I2CPeripheral* port;
-            MS5611(I2CPeripheral* port_, bool = true);
+            //~ uint16_t coeff[];
+            MS5611(i2c_dev* const dev_);
             void setup();
             void sample();
-            void timer_sample();
+            void saveData(struct i2c_msg*);
             void read_PROM();
     };
 }

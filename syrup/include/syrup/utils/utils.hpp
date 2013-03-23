@@ -24,7 +24,7 @@ namespace syrup {
     }
 
     template<typename T>
-    void classInterruptHandler(void* ptr) {((T*)ptr)->run();}
+    void classInterruptHandler(void* ptr) {((T*)ptr)->isr();}
 }
 
 #endif

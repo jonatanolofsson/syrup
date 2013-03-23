@@ -15,19 +15,12 @@ namespace syrup {
     }
 
     int write(const int descriptor, const U8* buf, const int length) {
-        //~ assert(descriptor < currentDescriptor);
-        //~ Serial3.print("Write to descriptor ");
-        //~ Serial3.print(descriptor);
-        //~ Serial3.print(", ");
-        //~ Serial3.print(length);
-        //~ Serial3.println("bytes");
         descriptors[descriptor]->send(buf, length);
         return length;
     }
 
     int read(const int descriptor, U8* const buf, const int length) {
         //~ assert(descriptor < currentDescriptor);
-        descriptors[descriptor]->get(buf, length);
-        return length;
+        return descriptors[descriptor]->get(buf, length);
     }
 }

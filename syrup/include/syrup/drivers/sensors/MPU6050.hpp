@@ -3,13 +3,16 @@
 
 #include <syrup/drivers/sensors/Sensor.hpp>
 #include <stdint.h>
-#include <syrup/comm/ByteInterface.hpp>
+#include <libmaple/i2c.h>
 
 namespace syrup {
     class MPU6050 : public SuperSensor<6> {
         private:
+            i2c_dev* device;
             uint16_t previous_accX;
             uint8_t exti_pin;
+
+            uint8_t buffer[14];
         public:
             enum i2c_address {
                 I2C_ADDRESS_LOW     = 0x68,
@@ -56,9 +59,9 @@ namespace syrup {
                 MAX_8G      = 0x02,
                 MAX_16G     = 0x03
             };
-            ByteInterface* port;
-            MPU6050(ByteInterface* port_, const uint8_t exti_pin_ = 0);
+            MPU6050(i2c_dev* dev_, const uint8_t exti_pin_ = 0);
             void setup();
+            void saveData(struct i2c_msg*);
             void sample();
     };
 }

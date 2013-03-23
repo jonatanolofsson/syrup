@@ -13,17 +13,21 @@ using std::max;
 using std::abs;
 
 
-inline uint32_t convert_endian(const int8_t _1, const int8_t _2, const int8_t _3, const int8_t _4)
-{
-    return _4 << 24 | _3 << 16 | _2 << 8 | _1;
-}
-inline uint32_t convert_endian(const int8_t _1, const int8_t _2, const int8_t _3)
-{
-    return _3 << 24 | _2 << 16 | _1 << 8;
-}
-inline uint16_t convert_endian(const int8_t _1, const int8_t _2)
-{
-    return _2 << 8 | _1;
-}
+#define __bswap_constant_16(x) \
+     ((unsigned short int) ((((x) >> 8) & 0xff) | (((x) & 0xff) << 8)))
+
+#define __bswap_constant_32(x) \
+     ((((x) & 0xff000000) >> 24) | (((x) & 0x00ff0000) >>  8) |           \
+      (((x) & 0x0000ff00) <<  8) | (((x) & 0x000000ff) << 24))
+
+#define htobe16(x) __bswap_constant_16 (x)
+#define htole16(x) (x)
+#define be16toh(x) __bswap_constant_16 (x)
+#define le16toh(x) (x)
+
+#define htobe32(x) __bswap_constant_32 (x)
+#define htole32(x) (x)
+#define be32toh(x) __bswap_constant_32 (x)
+#define le32toh(x) (x)
 
 #endif
