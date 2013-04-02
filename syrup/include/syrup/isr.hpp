@@ -9,6 +9,10 @@ namespace syrup {
         void serveOne();
         void serviceLoop();
         void kill();
+        template<typename T, void(T::*FN)()>
+        void invokeMember(void* p) {
+            (((T*)p)->*FN)();
+        }
     }
 }
 
