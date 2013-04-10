@@ -1,27 +1,29 @@
-#ifndef SYRUP_DRIVERS_MS5611_HPP
-#define SYRUP_DRIVERS_MS5611_HPP
+#ifndef SYRUP_DRIVERS_ADNS3080_HPP_
+#define SYRUP_DRIVERS_ADNS3080_HPP_
 
 #include <syrup/drivers/sensors/Sensor.hpp>
 #include <stdint.h>
-#include <libmaple/i2c.h>
+#include <wirish/wirish.h>
 
 namespace syrup {
-    class ADNS3080 : public SuperSensor<1> {
+    class ADNS3080 : public SuperSensor<2> {
         private:
-            spi_dev* device;
+            HardwareSPI* device;
+            U8 sspin;
 
-            uint8_t buffer[7];
-            i2c_msg initMsgs[1];
-            i2c_msg sampleMsgs[7];
+            U8 buffer[7];
+            dma_message trigger;
+            dma_message message;
         public:
             enum reg {
                 MOTION_BURST    = 0x50
             };
-            MS5611(spi_dev* const dev_);
+            ADNS3080(HardwareSPI* const dev_);
+            void printBuffer();
             void setup();
             void sample();
-            void saveData(struct spi_msg*);
-            void read_PROM();
+            void getData(dma_message*, dma_irq_cause);
+            void saveData(dma_message*, dma_irq_cause);
     };
 }
 #endif

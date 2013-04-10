@@ -34,7 +34,7 @@ namespace syrup {
             void send(const U8* const a, const int b) {
                 #if USE_DMA
                 static bool n = 0;
-                dev->write(txMsgs[n]((const unsigned char* const)a,b,txCallback));
+                dev->write(txMsgs[n]((volatile unsigned char* const)a,b,txCallback));
                 n = !n;
                 txMsgs[n].wait();
                 #else

@@ -58,25 +58,12 @@ namespace syrup {
     }
 
     void MPU6050::saveData(struct i2c_msg*) {
-        uint16_t d = be16toh(*(uint16_t*)&buffer[0]);
-        //~ print(d);
-        //~ Serial3.println("");
-        if(d == 0) return;
-        if(d != previous_accX) {
-            previous_accX = d;
-            data[bufferswitch][ACC_X] += d;
-            ++samples[bufferswitch][ACC_X];
-            data[bufferswitch][ACC_Y] += be16toh(*(uint16_t*)&buffer[2]);
-            ++samples[bufferswitch][ACC_Y];
-            data[bufferswitch][ACC_Z] += be16toh(*(uint16_t*)&buffer[4]);
-            ++samples[bufferswitch][ACC_Z];
-        }
-        data[bufferswitch][GYRO_X] += be16toh(*(uint16_t*)&buffer[8]);
-        ++samples[bufferswitch][GYRO_X];
-        data[bufferswitch][GYRO_Y] += be16toh(*(uint16_t*)&buffer[10]);
-        ++samples[bufferswitch][GYRO_Y];
-        data[bufferswitch][GYRO_Z] += be16toh(*(uint16_t*)&buffer[12]);
-        ++samples[bufferswitch][GYRO_Z];
+        data[bufferswitch][ACC_X] += be16toh(*(uint16_t*)&buffer[0]);   ++samples[bufferswitch][ACC_X];
+        data[bufferswitch][ACC_Y] += be16toh(*(uint16_t*)&buffer[2]);   ++samples[bufferswitch][ACC_Y];
+        data[bufferswitch][ACC_Z] += be16toh(*(uint16_t*)&buffer[4]);   ++samples[bufferswitch][ACC_Z];
+        data[bufferswitch][GYRO_X] += be16toh(*(uint16_t*)&buffer[8]);  ++samples[bufferswitch][GYRO_X];
+        data[bufferswitch][GYRO_Y] += be16toh(*(uint16_t*)&buffer[10]); ++samples[bufferswitch][GYRO_Y];
+        data[bufferswitch][GYRO_Z] += be16toh(*(uint16_t*)&buffer[12]); ++samples[bufferswitch][GYRO_Z];
     }
 
     void MPU6050::sample()

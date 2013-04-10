@@ -28,6 +28,7 @@ cppSRCS_$(d) += drivers/sensors/HMC5883L.cpp
 cppSRCS_$(d) += drivers/sensors/TCS230.cpp
 cppSRCS_$(d) += drivers/sensors/AnalogSensor.cpp
 cppSRCS_$(d) += drivers/sensors/SRF04.cpp
+cppSRCS_$(d) += drivers/sensors/ADNS3080.cpp
 #~
 #~ cppSRCS_$(d) += drivers/actuators/HDDVoiceCoil.cpp
 #~

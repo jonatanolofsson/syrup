@@ -10,19 +10,18 @@
 #include <syrup/types.hpp>
 
 namespace syrup {
-    template<int N>
+    template<int N, typename DATA = S32, typename MEAS = S16>
     class Sensor;
 
-    template<int N>
-    void sensorISR(void* o) {((Sensor<N>*)o)->lowerISR();}
+    template<int N, typename DATA = S32, typename MEAS = S16>
+    void sensorISR(void* o) {((Sensor<N,DATA,MEAS>*)o)->lowerISR();}
 
-    template<int N>
+    template<int N, typename DATA, typename MEAS>
     class Sensor
     {
         public:
-            typedef U32    data_t;
-            typedef U16    raw_t;
-            typedef U16    measurement_t;
+            typedef DATA    data_t;
+            typedef MEAS    measurement_t;
             bool bufferswitch;
             data_t data[2][N];
 
@@ -100,19 +99,19 @@ namespace syrup {
             }
     };
 
-    template<int N>
-    class SuperSensor : public Sensor<N>
+    template<int N, typename DATA = S32, typename MEAS = S16>
+    class SuperSensor : public Sensor<N, DATA, MEAS>
     {
         private:
-            typedef Sensor<N> Parent;
+            typedef Sensor<N,DATA,MEAS> Parent;
         public:
             using Parent::switch_buffer;
             using Parent::bufferswitch;
             using Parent::data;
             using Parent::make_record;
 
-            typedef U16   samplecount_t;
-            typedef U16   measurement_t;
+            typedef MEAS   samplecount_t;
+            typedef MEAS   measurement_t;
             samplecount_t   samples[2][N];
             SuperSensor() : Parent() {
                 clear();
@@ -126,9 +125,13 @@ namespace syrup {
                 switch_buffer();
 
                 for(unsigned int i = 0; i < N; ++i) {
-                    buffer[i] = data[mbuffer][i] / samples[mbuffer][i];
+                    if(samples[mbuffer][i] == 0) {
+                        buffer[i] = 0;
+                    } else {
+                        buffer[i] = data[mbuffer][i] / samples[mbuffer][i];
+                    }
                 }
-                make_record(buffer);
+                //~ make_record(buffer);
                 memset(data[mbuffer], 0, sizeof(data[0]));
                 memset(samples[mbuffer], 0, sizeof(samples[0]));
             }
