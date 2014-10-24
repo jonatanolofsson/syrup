@@ -1,0 +1,10 @@
+include_rules
+
+SENSORS  = AnalogSensor.cpp
+SENSORS += HMC5883L.cpp
+SENSORS += MPU6050.cpp
+SENSORS += MS5611.cpp
+SENSORS += SRF04.cpp
+
+
+: foreach $(SENSORS) |> !cxx |>

@@ -30,4 +30,7 @@ using std::abs;
 #define be32toh(x) __bswap_constant_32 (x)
 #define le32toh(x) (x)
 
+#define bytestou32(bytes) (bytes)[0] + ((bytes)[1] << 8) + ((bytes)[2] << 16) + ((bytes)[3] << 24);
+#define bytestou16(bytes) (bytes)[0] + ((bytes)[1] << 8);
+
 #endif

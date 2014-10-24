@@ -1,0 +1,4 @@
+ifdef INCLUDE_GRAPHICS
+    include_rules
+    : foreach *.cpp |> !cxx |>
+endif

@@ -12,7 +12,10 @@ namespace syrup {
             uint16_t previous_accX;
             uint8_t exti_pin;
 
-            uint8_t buffer[14];
+            union {
+                uint8_t raw[12];
+                uint16_t ints[6];
+            } buffer;
         public:
             enum i2c_address {
                 I2C_ADDRESS_LOW     = 0x68,

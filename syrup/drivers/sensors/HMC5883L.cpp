@@ -10,7 +10,7 @@ namespace syrup {
             2, (U8[]){HMC5883L::CONFIG_A, HMC5883L::AVG8 | HMC5883L::HZ75}
         }
     };
-    static i2c_msg sampleMsgs[] = {
+    static __unused i2c_msg sampleMsgs[] = {
         {
             HMC5883L::I2C_ADDRESS,
             1, (U8[]){HMC5883L::MODE, HMC5883L::SINGLE}
@@ -39,7 +39,7 @@ namespace syrup {
 
     void HMC5883L::setup() {
         i2c_master_xfer(device, initMsgs, 1, 0);
-        sampleMsgs[2].data = buffer;
+        sampleMsgs[2].data = buffer.raw;
         sampleMsgs[2].arg = this;
         sampleMsgs[2].callback = &i2cMemberCallback<HMC5883L, &HMC5883L::saveData>;
 
@@ -47,13 +47,13 @@ namespace syrup {
     }
 
     void HMC5883L::saveData(struct i2c_msg*) {
-        uint16_t d = be16toh(*(U16*)&buffer[0]);
+        uint16_t d = buffer.ints[0];
         if(d == 0) return;
         data[bufferswitch][X] += d;
         ++samples[bufferswitch][X];
-        data[bufferswitch][Y] += be16toh(*(U16*)&buffer[2]);
+        data[bufferswitch][Y] += buffer.ints[1];
         ++samples[bufferswitch][Y];
-        data[bufferswitch][Z] += be16toh(*(U16*)&buffer[4]);
+        data[bufferswitch][Z] += buffer.ints[2];
         ++samples[bufferswitch][Z];
     }
 

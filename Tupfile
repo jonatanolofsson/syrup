@@ -1,0 +1,2 @@
+include_rules
+: <syrup> |> $(AR) crs %o %<syrup> |> libsyrup.a

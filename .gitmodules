@@ -1,0 +1,3 @@
+[submodule "libmaple"]
+	path = libmaple
+	url = git@github.com:jonatanolofsson/libmaple.git

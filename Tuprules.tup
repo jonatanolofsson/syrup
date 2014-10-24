@@ -1,0 +1,46 @@
+TOP = $(TUP_CWD)
+
+CROSS_COMPILE = arm-none-eabi-
+
+CC       = ccache $(CROSS_COMPILE)gcc
+CXX      = ccache $(CROSS_COMPILE)g++
+LD       = $(CROSS_COMPILE)ld -v
+AR       = $(CROSS_COMPILE)ar
+AS       = ccache $(CROSS_COMPILE)gcc
+OBJCOPY  = $(CROSS_COMPILE)objcopy
+DISAS    = $(CROSS_COMPILE)objdump
+OBJDUMP  = $(CROSS_COMPILE)objdump
+SIZE     = $(CROSS_COMPILE)size
+DFU      = dfu-util
+
+TARGET_FLAGS  = -mcpu=cortex-m3
+TARGET_FLAGS += -march=armv7-m
+TARGET_FLAGS += -mthumb
+
+TARGET_FLAGS += -DMCU_STM32F103CB
+
+CFLAGS  = $(TARGET_FLAGS)
+CFLAGS += -Os
+CFLAGS += -g3
+CFLAGS += -gdwarf-2
+CFLAGS += -nostdlib
+CFLAGS += -ffunction-sections
+CFLAGS += -fdata-sections
+CFLAGS += -Wl,--gc-sections
+CFLAGS += -Wall
+CFLAGS += -Werror
+CFLAGS += -Wno-unknown-pragmas
+
+CXXFLAGS  = $(CFLAGS)
+CXXFLAGS += -std=c++0x
+CXXFLAGS += -fno-rtti
+CXXFLAGS += -fno-exceptions
+
+INCLUDE_FLAGS  = -I$(TOP)/libmaple/libmaple/include
+INCLUDE_FLAGS += -I$(TOP)/libmaple/libmaple/stm32f1/include
+INCLUDE_FLAGS += -I$(TOP)/libmaple/wirish/include
+INCLUDE_FLAGS += -I$(TOP)/libmaple/wirish/boards/maple_mini/include
+
+INCLUDE_FLAGS += -I$(TOP)/syrup/include
+
+!cxx = |> ^o^ $(CXX) $(CXXFLAGS) $(INCLUDE_FLAGS) -c %f -o %o |> %B.o $(TOP)/<syrup>

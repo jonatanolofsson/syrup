@@ -120,7 +120,7 @@ namespace syrup {
                 memset(samples[0], 0, sizeof(samples[0]));
                 memset(samples[1], 0, sizeof(samples[1]));
             }
-            void measure(measurement_t* buffer) {
+            void measure(measurement_t*const buffer, samplecount_t*const nofMeasurements) {
                 bool mbuffer = bufferswitch;
                 switch_buffer();
 

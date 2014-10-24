@@ -21,7 +21,7 @@ namespace syrup {
     };
 
     int open(ByteInterface* const iface);
-    inline void close(const int descriptor) {};
+    inline void close(const int) {}
     int write(const int descriptor, const U8* const data, const int length);
     int read(const int descriptor, U8* const buf, const int length);
 }

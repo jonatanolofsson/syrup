@@ -11,7 +11,11 @@ namespace syrup {
             i2c_dev* device;
             uint8_t exti_pin;
 
-            uint8_t buffer[6];
+            union {
+                uint8_t raw[6];
+                uint16_t ints[3];
+            } buffer;
+
             i2c_msg sampleMsgs[3];
         public:
             enum address {
