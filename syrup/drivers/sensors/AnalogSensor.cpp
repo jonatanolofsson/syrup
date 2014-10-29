@@ -13,6 +13,6 @@ namespace syrup {
     }
     void AnalogSensor::sample() {
         data[bufferswitch][0] += analogRead(pin);
-        ++samples[bufferswitch][0];
+        ++samples[bufferswitch];
     }
 }

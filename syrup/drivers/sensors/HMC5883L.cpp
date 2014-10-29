@@ -50,11 +50,9 @@ namespace syrup {
         uint16_t d = buffer.ints[0];
         if(d == 0) return;
         data[bufferswitch][X] += d;
-        ++samples[bufferswitch][X];
         data[bufferswitch][Y] += buffer.ints[1];
-        ++samples[bufferswitch][Y];
         data[bufferswitch][Z] += buffer.ints[2];
-        ++samples[bufferswitch][Z];
+        ++samples[bufferswitch];
     }
 
     void HMC5883L::sample()

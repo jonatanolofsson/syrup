@@ -99,7 +99,7 @@ namespace syrup {
             }
     };
 
-    template<int N, typename DATA = S32, typename MEAS = S16>
+    template<int N, typename DATA = S32, typename MEAS = U16>
     class SuperSensor : public Sensor<N, DATA, MEAS>
     {
         private:
@@ -111,29 +111,25 @@ namespace syrup {
             using Parent::make_record;
 
             typedef MEAS   samplecount_t;
-            typedef MEAS   measurement_t;
-            samplecount_t   samples[2][N];
+            typedef DATA   measurement_t;
+            samplecount_t   samples[2];
             SuperSensor() : Parent() {
                 clear();
             }
             void clear() {
-                memset(samples[0], 0, sizeof(samples[0]));
-                memset(samples[1], 0, sizeof(samples[1]));
+                memset(&samples, 0, sizeof(samples));
             }
             void measure(measurement_t*const buffer, samplecount_t*const nofMeasurements) {
                 bool mbuffer = bufferswitch;
                 switch_buffer();
+                *nofMeasurements = samples[mbuffer];
 
-                for(unsigned int i = 0; i < N; ++i) {
-                    if(samples[mbuffer][i] == 0) {
-                        buffer[i] = 0;
-                    } else {
-                        buffer[i] = data[mbuffer][i] / samples[mbuffer][i];
-                    }
+                for(int i = 0; i < N; ++i) {
+                    buffer[i] = data[mbuffer][i];
                 }
                 //~ make_record(buffer);
-                memset(data[mbuffer], 0, sizeof(data[0]));
-                memset(samples[mbuffer], 0, sizeof(samples[0]));
+                memset(&data[mbuffer], 0, sizeof(data[0]));
+                memset(&samples[mbuffer], 0, sizeof(samples[0]));
             }
     };
 } // namespace syrup

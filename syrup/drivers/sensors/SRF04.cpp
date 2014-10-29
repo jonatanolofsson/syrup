@@ -20,7 +20,7 @@ namespace syrup {
         if(!master || !digitalRead(exti_pin)) {
             bool mbuffer = bufferswitch;
             data[mbuffer][0] += timer_get_count(timer);
-            ++samples[mbuffer][0];
+            ++samples[mbuffer];
         } else {
             if(master) {
                 timer_generate_update(timer);

@@ -45,7 +45,7 @@ namespace syrup {
         uint8_t d = (buffer[0] << 16) | (buffer[1] << 8) | (buffer[2]);
         if(0 == d) { return; }
         data[bufferswitch][0] += d;
-        ++samples[bufferswitch][0];
+        ++samples[bufferswitch];
     }
 
     void MS5611::sample()
