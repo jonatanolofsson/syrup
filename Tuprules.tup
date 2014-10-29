@@ -17,16 +17,16 @@ TARGET_FLAGS  = -mcpu=cortex-m3
 TARGET_FLAGS += -march=armv7-m
 TARGET_FLAGS += -mthumb
 
+TARGET_FLAGS += -DBOOTLOADER_maple
 TARGET_FLAGS += -DMCU_STM32F103CB
+TARGET_FLAGS += -DBOARD_@(BOARD)
+
 
 CFLAGS  = $(TARGET_FLAGS)
 CFLAGS += -Os
-CFLAGS += -g3
-CFLAGS += -gdwarf-2
 CFLAGS += -nostdlib
 CFLAGS += -ffunction-sections
 CFLAGS += -fdata-sections
-CFLAGS += -Wl,--gc-sections
 CFLAGS += -Wall
 CFLAGS += -Werror
 CFLAGS += -Wno-unknown-pragmas
