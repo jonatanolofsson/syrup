@@ -49,10 +49,10 @@ namespace syrup {
     void HMC5883L::saveData(struct i2c_msg*) {
         uint16_t d = buffer.ints[0];
         if(d == 0) return;
-        data[bufferswitch][X] += d;
-        data[bufferswitch][Y] += buffer.ints[1];
-        data[bufferswitch][Z] += buffer.ints[2];
-        ++samples[bufferswitch];
+        data[X] += d;
+        data[Y] += buffer.ints[1];
+        data[Z] += buffer.ints[2];
+        ++samples;
     }
 
     void HMC5883L::sample()

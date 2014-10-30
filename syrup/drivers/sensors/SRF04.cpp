@@ -18,9 +18,8 @@ namespace syrup {
     void SRF04::sample()
     {
         if(!master || !digitalRead(exti_pin)) {
-            bool mbuffer = bufferswitch;
-            data[mbuffer][0] += timer_get_count(timer);
-            ++samples[mbuffer];
+            data[0] += timer_get_count(timer);
+            ++samples;
         } else {
             if(master) {
                 timer_generate_update(timer);

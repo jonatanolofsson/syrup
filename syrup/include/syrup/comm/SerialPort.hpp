@@ -9,11 +9,12 @@
 #define USE_DMA 1
 
 namespace syrup {
-    template<typename T>
+    template<typename T, int BUFFERSIZE = 100>
     class SerialPort : public ByteInterface {
         #if USE_DMA
         private:
             typedef ByteInterface Parent;
+            volatile U8 buffer[2][BUFFERSIZE];
             dma_message txMsgs[2];
             dma_message rxMsg;
             int receivedBytes;
@@ -34,7 +35,9 @@ namespace syrup {
             void send(const U8* const a, const int b) {
                 #if USE_DMA
                 static bool n = 0;
-                dev->write(txMsgs[n]((volatile unsigned char* const)a,b,txCallback));
+                ASSERT(b <= BUFFERSIZE);
+                memcpy((void*)buffer[n], a, b);
+                dev->write(txMsgs[n](buffer[n],b,txCallback));
                 n = !n;
                 txMsgs[n].wait();
                 #else

@@ -8,13 +8,14 @@
 namespace syrup {
     class MPU6050 : public SuperSensor<6> {
         private:
+            typedef SuperSensor<6> Parent;
             i2c_dev* device;
             uint16_t previous_accX;
             uint8_t exti_pin;
 
             union {
-                uint8_t raw[12];
-                uint16_t ints[6];
+                uint8_t raw[14];
+                uint16_t ints[7];
             } buffer;
         public:
             enum i2c_address {

@@ -19,9 +19,8 @@ namespace syrup {
 
     void TCS230::sample()
     {
-        bool mbuffer = bufferswitch;
-        data[mbuffer][0] += timer_get_count(timer);
-        ++samples[mbuffer][0];
+        data[0] += timer_get_count(timer);
+        ++samples;
         timer_generate_update(timer);
     }
 } // namespace syrup

@@ -44,8 +44,8 @@ namespace syrup {
     void MS5611::saveData(struct i2c_msg*) {
         uint8_t d = (buffer[0] << 16) | (buffer[1] << 8) | (buffer[2]);
         if(0 == d) { return; }
-        data[bufferswitch][0] += d;
-        ++samples[bufferswitch];
+        data[0] += d;
+        ++samples;
     }
 
     void MS5611::sample()

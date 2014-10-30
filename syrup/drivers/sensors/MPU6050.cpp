@@ -58,13 +58,14 @@ namespace syrup {
     }
 
     void MPU6050::saveData(struct i2c_msg*) {
-        data[bufferswitch][ACC_X]  += buffer.ints[0];
-        data[bufferswitch][ACC_Y]  += buffer.ints[1];
-        data[bufferswitch][ACC_Z]  += buffer.ints[2];
-        data[bufferswitch][GYRO_X] += buffer.ints[3];
-        data[bufferswitch][GYRO_Y] += buffer.ints[4];
-        data[bufferswitch][GYRO_Z] += buffer.ints[5];
-        ++samples[bufferswitch];
+        //if(samples) return;
+        data[ACC_X]  += (S16)be16toh(buffer.ints[0]);
+        data[ACC_Y]  += (S16)be16toh(buffer.ints[1]);
+        data[ACC_Z]  += (S16)be16toh(buffer.ints[2]);
+        data[GYRO_X] += (S16)be16toh(buffer.ints[4]);
+        data[GYRO_Y] += (S16)be16toh(buffer.ints[5]);
+        data[GYRO_Z] += (S16)be16toh(buffer.ints[6]);
+        ++samples;
     }
 
     void MPU6050::sample()
