@@ -10,15 +10,11 @@
 #include <syrup/types.hpp>
 
 namespace syrup {
-    template<int N, typename DATA = S32, typename MEAS = S16>
-    class Sensor;
-
-    template<int N, typename DATA = S32, typename MEAS = S16>
-    void sensorISR(void* o) {((Sensor<N,DATA,MEAS>*)o)->lowerISR();}
-
     template<int N, typename DATA, typename MEAS>
     class Sensor
     {
+        private:
+            typedef Sensor<N, DATA, MEAS> Self;
         public:
             typedef DATA    data_t;
             typedef MEAS    measurement_t;
@@ -27,9 +23,9 @@ namespace syrup {
 
             virtual void sample() = 0;
             virtual void isr() {
-                isr::queue(sensorISR<N>, this);
+                isr::queue(&isr::invokeMember<Self, &Self::lowerIsr>, this);
             }
-            void lowerISR() {
+            void lowerIsr() {
                 sample();
             }
             Sensor() {
@@ -48,9 +44,8 @@ namespace syrup {
     template<int N, typename DATA = S32, typename MEAS = U16, typename SAMPL = U16>
     class SuperSensor : public Sensor<N, DATA, MEAS>
     {
-        private:
-            typedef Sensor<N,DATA,MEAS> Parent;
         public:
+            typedef Sensor<N,DATA,MEAS> Parent;
             using Parent::data;
 
             typedef DATA measurement_t;
@@ -61,8 +56,8 @@ namespace syrup {
                 samples = 0;
                 Parent::clear();
             }
-            void measure(measurement_t*const buffer, samplecount_t*const nofMeasurements) {
-                *nofMeasurements = samples;
+            void measure(measurement_t*const buffer, samplecount_t*const nofMeasurements = nullptr) {
+                if(nofMeasurements != nullptr) *nofMeasurements = samples;
                 memcpy(buffer, data, sizeof(data));
                 clear();
             }

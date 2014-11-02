@@ -1,6 +1,6 @@
 #include <syrup/drivers/sensors/MPU6050.hpp>
 #include <wirish/wirish.h>
-#include <syrup/utils/utils.hpp>
+#include <syrup/isr.hpp>
 #include <syrup/math/math.hpp>
 
 void print(int v, int base = 10);
@@ -26,15 +26,8 @@ namespace syrup {
     };
 
     static i2c_msg sampleMsgs[] = {
-        {
-            MPU6050::I2C_ADDRESS_LOW,
-            1, (U8[]){MPU6050::REG_SENSOR_DATA}
-        },
-        {
-            MPU6050::I2C_ADDRESS_LOW,
-            14, 0,
-            I2C_MSG_READ
-        }
+        {MPU6050::I2C_ADDRESS_LOW, 1, (U8[]){MPU6050::REG_SENSOR_DATA}},
+        {MPU6050::I2C_ADDRESS_LOW, 14, 0, I2C_MSG_READ}
     };
 
     MPU6050::MPU6050(i2c_dev* dev_, const uint8_t exti_pin_)
@@ -46,7 +39,7 @@ namespace syrup {
         setup();
         if(exti_pin) {
             pinMode(exti_pin, INPUT_PULLDOWN);
-            attachInterrupt(exti_pin, classInterruptHandler<MPU6050>, this, RISING);
+            attachInterrupt(exti_pin, &classInterruptHandler<MPU6050>, this, RISING);
         }
     }
 
@@ -58,7 +51,6 @@ namespace syrup {
     }
 
     void MPU6050::saveData(struct i2c_msg*) {
-        //if(samples) return;
         data[ACC_X]  += (S16)be16toh(buffer.ints[0]);
         data[ACC_Y]  += (S16)be16toh(buffer.ints[1]);
         data[ACC_Z]  += (S16)be16toh(buffer.ints[2]);

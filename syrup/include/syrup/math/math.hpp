@@ -8,6 +8,7 @@
 #define clamp(mn, val, mx) ((val)<(mn)?(mn):((val)>(mx)?(mx):(val)))
 #define sign(val)   ((val)<0?-1:1)
 #define heaviside(val)   ((val)<0?0:1)
+#define countof(a) ((sizeof(a)/sizeof(0[a])) / ((size_t)(!(sizeof(a) % sizeof(0[a])))))
 using std::min;
 using std::max;
 using std::abs;

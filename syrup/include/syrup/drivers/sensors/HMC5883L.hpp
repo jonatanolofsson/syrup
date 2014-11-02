@@ -8,16 +8,16 @@
 namespace syrup {
     class HMC5883L : public SuperSensor<3> {
         private:
+            typedef HMC5883L Self;
             i2c_dev* device;
             uint8_t exti_pin;
 
             union {
-                uint8_t raw[6];
-                uint16_t ints[3];
+                U8 raw[6];
+                S16 ints[3];
             } buffer;
-
-            i2c_msg sampleMsgs[3];
         public:
+            typedef SuperSensor<3> Parent;
             enum address {
                 I2C_ADDRESS     = 0x1E
             };
@@ -25,7 +25,7 @@ namespace syrup {
                 CONFIG_A        = 0x00,
                 CONFIG_B        = 0x01,
                 MODE            = 0x02,
-                READ            = 0x03,
+                DATA            = 0x03,
             };
             enum bit_offset {
                 MA              = 0x05,
@@ -67,6 +67,7 @@ namespace syrup {
             void saveData(struct i2c_msg*);
             void sample();
             void calibrate();
+            void startSample();
     };
 }
 #endif

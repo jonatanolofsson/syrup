@@ -12,7 +12,7 @@ namespace syrup {
     {
         pinMode(exti_pin, INPUT);
         timer_.setPeriod(3000);
-        attachInterrupt(exti_pin, classInterruptHandler<SRF04>, this, (master ? CHANGE : FALLING));
+        attachInterrupt(exti_pin, &classInterruptHandler<SRF04>, this, (master ? CHANGE : FALLING));
     }
 
     void SRF04::sample()

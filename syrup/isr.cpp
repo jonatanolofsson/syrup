@@ -1,4 +1,5 @@
 #include <syrup/isr.hpp>
+#include <wirish/wirish.h>
 
 #define NUM_ISRS    50
 namespace syrup {
@@ -18,7 +19,9 @@ namespace syrup {
             } //FIXME error reporting
         }
         void serveOne() {
-            if(nextIsr != lastIsr) {
+            bool hasMore = (nextIsr != lastIsr);
+            //digitalWrite(BOARD_LED_PIN, !hasMore);
+            if(hasMore) {
                 (*isrs[nextIsr].cb)(isrs[nextIsr].arg);
                 nextIsr = (nextIsr+1)%NUM_ISRS;
             }

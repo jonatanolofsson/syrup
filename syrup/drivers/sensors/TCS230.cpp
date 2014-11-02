@@ -2,7 +2,7 @@
 #include <wirish/wirish.h>
 #include <syrup/math/math.hpp>
 #include <stdint.h>
-#include <syrup/utils/utils.hpp>
+#include <syrup/isr.hpp>
 
 namespace syrup {
     TCS230::TCS230(const uint8_t exti_pin_, HardwareTimer& timer_)
@@ -14,7 +14,7 @@ namespace syrup {
         timer_.setPrescaleFactor(1);
         timer_.setOverflow(0xffff);
         timer_.refresh();
-        attachInterrupt(exti_pin, classInterruptHandler<TCS230>, this, CHANGE);
+        attachInterrupt(exti_pin, &isr::invokeMember<TCS230>, this, CHANGE);
     }
 
     void TCS230::sample()
