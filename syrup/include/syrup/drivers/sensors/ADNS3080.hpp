@@ -1,5 +1,4 @@
-#ifndef SYRUP_DRIVERS_ADNS3080_HPP_
-#define SYRUP_DRIVERS_ADNS3080_HPP_
+#pragma once
 
 #include <syrup/drivers/sensors/Sensor.hpp>
 #include <stdint.h>
@@ -26,4 +25,3 @@ namespace syrup {
             void saveData(dma_message*, dma_irq_cause);
     };
 }
-#endif

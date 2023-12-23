@@ -1,5 +1,4 @@
-#ifndef SYRUP_DRIVERS_SENSOR_HPP
-#define SYRUP_DRIVERS_SENSOR_HPP
+#pragma once
 
 #include <stdint.h>
 #include <string.h>
@@ -63,5 +62,3 @@ namespace syrup {
             }
     };
 } // namespace syrup
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef SYRUP_DRIVERS_MPU6050_HPP
-#define SYRUP_DRIVERS_MPU6050_HPP
+#pragma once
 
 #include <syrup/drivers/sensors/Sensor.hpp>
 #include <stdint.h>
@@ -69,4 +68,3 @@ namespace syrup {
             void sample();
     };
 }
-#endif

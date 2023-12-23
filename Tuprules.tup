@@ -32,14 +32,17 @@ CFLAGS += -Werror
 CFLAGS += -Wno-unknown-pragmas
 
 CXXFLAGS  = $(CFLAGS)
+CXXFLAGS += -nostdinc++
+CXXFLAGS += -isystem/usr/arm-none-eabi/include/c++/9.1.0
+CXXFLAGS += -isystem/usr/arm-none-eabi/include/c++/9.1.0/arm-none-eabi/thumb/v7-m/nofp
 CXXFLAGS += -std=c++0x
 CXXFLAGS += -fno-rtti
 CXXFLAGS += -fno-exceptions
 
-INCLUDE_FLAGS  = -I$(TOP)/libmaple/libmaple/include
-INCLUDE_FLAGS += -I$(TOP)/libmaple/libmaple/stm32f1/include
-INCLUDE_FLAGS += -I$(TOP)/libmaple/wirish/include
-INCLUDE_FLAGS += -I$(TOP)/libmaple/wirish/boards/maple_mini/include
+INCLUDE_FLAGS  = -isystem$(TOP)/libmaple/libmaple/include
+INCLUDE_FLAGS += -isystem$(TOP)/libmaple/libmaple/stm32f1/include
+INCLUDE_FLAGS += -isystem$(TOP)/libmaple/wirish/include
+INCLUDE_FLAGS += -isystem$(TOP)/libmaple/wirish/boards/maple_mini/include
 
 INCLUDE_FLAGS += -I$(TOP)/syrup/include
 
